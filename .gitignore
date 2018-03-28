@@ -1,0 +1,13 @@
+# This directory is meant for TLS/SSL assets, DO_TOKEN, etc
+secrets/
+
+# This one is consequence of the TLS/SSL assets generation
+.srl
+
+# For VIM Users
+*.swp
+
+# Terraform assets
+*.tfstate
+*.tfstate.backup
+
