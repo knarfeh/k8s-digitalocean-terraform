@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 set -o nounset -o errexit
 
 echo --node-ip=${NODE_PRIVATE_IP} >> /etc/systemd/system/kubelet.service.d/10-kubeadm.conf

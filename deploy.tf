@@ -56,7 +56,7 @@ provider "digitalocean" {
 
 
 resource "digitalocean_droplet" "k8s_master" {
-    image = "coreos-stable"
+    image = "ubuntu-16-04-x64"
     name = "${var.prefix}k8s-master"
     region = "${var.do_region}"
     private_networking = true
@@ -68,7 +68,7 @@ resource "digitalocean_droplet" "k8s_master" {
         destination = "/tmp/00-master.sh"
         connection {
             type = "ssh",
-            user = "core",
+            user = "root",
             private_key = "${file(var.ssh_private_key)}"
         }
     }
@@ -78,7 +78,7 @@ resource "digitalocean_droplet" "k8s_master" {
         destination = "/tmp/install-kubeadm.sh"
         connection {
             type = "ssh",
-            user = "core",
+            user = "root",
             private_key = "${file(var.ssh_private_key)}"
         }
     }
@@ -95,7 +95,7 @@ resource "digitalocean_droplet" "k8s_master" {
         ]
         connection {
             type = "ssh",
-            user = "core",
+            user = "root",
             private_key = "${file(var.ssh_private_key)}"
         }
     }
@@ -103,7 +103,7 @@ resource "digitalocean_droplet" "k8s_master" {
     # copy secrets to local
     provisioner "local-exec" {
         command =<<EOF
-            scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${var.ssh_private_key} core@${digitalocean_droplet.k8s_master.ipv4_address}:"/tmp/kubeadm_join /etc/kubernetes/admin.conf" ${path.module}/secrets/
+            scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${var.ssh_private_key} root@${digitalocean_droplet.k8s_master.ipv4_address}:"/tmp/kubeadm_join /etc/kubernetes/admin.conf" ${path.module}/secrets/
             sed -i '' "s/${digitalocean_droplet.k8s_master.ipv4_address_private}/${digitalocean_droplet.k8s_master.ipv4_address}/" ${path.module}/secrets/admin.conf
 EOF
     }
@@ -120,7 +120,7 @@ EOF
 
 resource "digitalocean_droplet" "k8s_worker" {
     count = "${var.number_of_workers}"
-    image = "coreos-stable"
+    image = "ubuntu-16-04-x64"
     name = "${var.prefix}${format("k8s-worker-%02d", count.index + 1)}"
     region = "${var.do_region}"
     size = "${var.size_worker}"
@@ -135,7 +135,7 @@ resource "digitalocean_droplet" "k8s_worker" {
         destination = "/tmp/01-worker.sh"
         connection {
             type = "ssh",
-            user = "core",
+            user = "root",
             private_key = "${file(var.ssh_private_key)}"
         }
     }
@@ -145,7 +145,7 @@ resource "digitalocean_droplet" "k8s_worker" {
         destination = "/tmp/install-kubeadm.sh"
         connection {
             type = "ssh",
-            user = "core",
+            user = "root",
             private_key = "${file(var.ssh_private_key)}"
         }
     }
@@ -155,7 +155,7 @@ resource "digitalocean_droplet" "k8s_worker" {
         destination = "/tmp/kubeadm_join"
         connection {
             type = "ssh",
-            user = "core",
+            user = "root",
             private_key = "${file(var.ssh_private_key)}"
         }
     }
@@ -171,7 +171,7 @@ resource "digitalocean_droplet" "k8s_worker" {
         ]
         connection {
             type = "ssh",
-            user = "core",
+            user = "root",
             private_key = "${file(var.ssh_private_key)}"
         }
     }
