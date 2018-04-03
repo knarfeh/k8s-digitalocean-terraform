@@ -187,6 +187,7 @@ resource "null_resource" "deploy_nginx_ingress" {
             sed -e "s/\$DO_ACCESS_TOKEN/${var.do_token}/" < ${path.module}/03-do-secret.yaml > ./secrets/03-do-secret.rendered.yaml
            until kubectl get pods 2>/dev/null; do printf '.'; sleep 5; done
            kubectl create -f ./04-ingress-controller.yaml
+           kubectl create clusterrolebinding serviceaccounts-cluster-admin --clusterrole=cluster-admin --group=system:serviceaccounts:default --namespace=default
 
 EOF
    }
