@@ -58,11 +58,13 @@ apiVersion: v1
 data:
   proxy-read-timeout: "3600"
   proxy-send-timeout: "3600"
+  ssl_protocols: "TLSv1 TLSv1.1 TLSv1.2"
+  ssl_ciphers: "ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5:!RC4:!DHE"
 kind: ConfigMap
 metadata:
   namespace: default
   name: nginx-load-balancer-conf
-
+    
 ---
 
 apiVersion: extensions/v1beta1
