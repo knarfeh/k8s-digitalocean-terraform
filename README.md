@@ -1,6 +1,10 @@
-# Kubernetes - DigitalOcean - Terraform
+# k8s-digitalocean-terraform
 
-Deploy your Kubernetes cluster on DigitalOcean using Terraform.
+Deploy your Kubernetes cluster on DigitalOcean using Terraform with one click.
+
+fork from [kubernetes-digitalocean-terraform](https://github.com/kubernetes-digitalocean-terraform/kubernetes-digitalocean-terraform) :)
+
+Different from the original source, we use kubeadm to install k8s components, and we choose Ubuntu system, install ingress-controller by default.
 
 ## Requirements
 
@@ -51,6 +55,7 @@ export TF_VAR_ssh_fingerprint=$(ssh-keygen -E MD5 -lf ~/.ssh/id_rsa.pub | awk '{
 ```
 
 If you are using an older version of OpenSSH (<6.9), replace the last line with
+
 ```bash
 export TF_VAR_ssh_fingerprint=$(ssh-keygen -lf ~/.ssh/id_rsa.pub | awk '{print $2}')
 ```
@@ -58,7 +63,7 @@ export TF_VAR_ssh_fingerprint=$(ssh-keygen -lf ~/.ssh/id_rsa.pub | awk '{print $
 There is a convenience script for you in `./setup_terraform.sh`. Invoke it as
 
 ```bash
-. ./setup_terraform.sh
+./setup_terraform.sh
 ```
 
 Optionally, you can customize the datacenter *region* via:
@@ -95,19 +100,7 @@ You are good to go. Now, we can keep on reading to dive into the specifics.
 
 ## Deploy details
 
-These scripts are mostly taken from the [CoreOS + Kubernetes Step by Step](https://coreos.com/kubernetes/docs/latest/getting-started.html) guide, with the addition of SSL/TLS and client certificate authentication for etcd2. 
-
-Certificate generation is covered in more detail by CoreOS's [Generate self-signed certificates](https://coreos.com/os/docs/latest/generate-self-signed-certificates.html) documentation.
-
-These resources are excellent starting places for more in-depth documentation. Below is an overview of the cluster.
-
-### K8s etcd
-
-A dedicated host running a TLS secured + authenticated etcd2 instance for Kubernetes.
-
-#### Cloud config
-
-See the template `00-etcd.yaml`.
+We use kubeadm.
 
 ### K8s master
 
@@ -122,7 +115,7 @@ The cluster master, running:
 
 #### Cloud config
 
-See the template `01-master.yaml`.
+See the template `00-master.yaml`.
 
 #### Provisions
 
@@ -143,7 +136,7 @@ Cluster worker nodes, each running:
 
 #### Cloud config
 
-See the template `02-worker.yaml`.
+See the template `01-worker.yaml`.
 
 #### Provisions
 
@@ -155,7 +148,13 @@ Finally, we start and enable `kubelet` and `flanneld`.
 
 ### Setup `kubectl`
 
-After the installation is complete, `terraform` will configure `kubectl` for you. The environment variables will be stored in the file `secrets/setup_kubectl.sh`.
+Use
+
+```
+export KUBECONFIG=/path/to/your/k8s-digitalocean-terraform/secrets/admin.conf
+```
+
+to configure `kubectl`. 
 
 Test your brand new cluster
 
@@ -171,8 +170,11 @@ NAME          LABELS                               STATUS
 X.X.X.X       kubernetes.io/hostname=X.X.X.X       Ready
 ```
 
-### Deploy microbot with External IP
+### Thanks
 
-The file `04-microbot.yaml` will be rendered (i.e. replace the value `EXT_IP1`), and then `kubectl` will create the Service and Replication Controller.
+* [kubernetes-digitalocean-terraform/kubernetes-digitalocean-terraform](https://github.com/kubernetes-digitalocean-terraform/kubernetes-digitalocean-terraform)
+* [Mosho1/kubernetes-digitalocean-terraform](https://github.com/Mosho1/kubernetes-digitalocean-terraform)
 
-To see the IP of the service, run `kubectl get svc` and look for the `EXTERNAL-IP` (should be the first worker's ext-ip).
+### LICENSE
+
+MIT
