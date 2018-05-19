@@ -45,18 +45,11 @@ metadata:
   name: hello
   namespace: default
   annotations:
-    kubernetes.io/tls-acme: "true"
     kubernetes.io/ingress.class: "nginx"
     ingress.kubernetes.io/limit-rps: "1"
     ingress.kubernetes.io/enable-cors: "true"
     ingress.kubernetes.io/rewrite-target: /
-    ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/ssl-ciphers: "ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5:!RC4:!DHE;"
 spec:
-  tls:
-  - hosts:
-    - int.nujeh.com
-    secretName: hello-tls
   rules:
   - host: int.nujeh.com
     http:
