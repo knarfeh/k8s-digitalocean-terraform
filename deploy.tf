@@ -184,9 +184,9 @@ resource "null_resource" "deploy_nginx_ingress" {
    provisioner "local-exec" {
        command = <<EOF
            export KUBECONFIG=${path.module}/secrets/admin.conf
-            sed -e "s/\$DO_ACCESS_TOKEN/${var.do_token}/" < ${path.module}/03-do-secret.yaml > ./secrets/03-do-secret.rendered.yaml
+            sed -e "s/\$DO_ACCESS_TOKEN/${var.do_token}/" < ${path.module}/02-do-secret.yaml > ./secrets/02-do-secret.rendered.yaml
            until kubectl get pods 2>/dev/null; do printf '.'; sleep 5; done
-           kubectl create -f ./04-ingress-controller.yaml
+           kubectl create -f ./03-ingress-controller.yaml
            kubectl create clusterrolebinding serviceaccounts-cluster-admin --clusterrole=cluster-admin --group=system:serviceaccounts:default --namespace=default
 
 EOF
@@ -198,9 +198,9 @@ resource "null_resource" "deploy_hello" {
    provisioner "local-exec" {
        command = <<EOF
            export KUBECONFIG=${path.module}/secrets/admin.conf
-            sed -e "s/\$DO_ACCESS_TOKEN/${var.do_token}/" < ${path.module}/03-do-secret.yaml > ./secrets/03-do-secret.rendered.yaml 
+            sed -e "s/\$DO_ACCESS_TOKEN/${var.do_token}/" < ${path.module}/02-do-secret.yaml > ./secrets/02-do-secret.rendered.yaml 
            until kubectl get pods 2>/dev/null; do printf '.'; sleep 5; done
-           kubectl create -f ./05-hello.yaml
+           kubectl create -f ./04-hello.yaml
 
 EOF
    }
@@ -211,9 +211,9 @@ resource "null_resource" "deploy_digitalocean_cloud_controller_manager" {
     provisioner "local-exec" {
         command = <<EOF
             export KUBECONFIG=${path.module}/secrets/admin.conf
-            sed -e "s/\$DO_ACCESS_TOKEN/${var.do_token}/" < ${path.module}/03-do-secret.yaml > ./secrets/03-do-secret.rendered.yaml
+            sed -e "s/\$DO_ACCESS_TOKEN/${var.do_token}/" < ${path.module}/02-do-secret.yaml > ./secrets/02-do-secret.rendered.yaml
             until kubectl get pods 2>/dev/null; do printf '.'; sleep 5; done
-            kubectl create -f ./secrets/03-do-secret.rendered.yaml
+            kubectl create -f ./secrets/02-do-secret.rendered.yaml
             kubectl create -f https://raw.githubusercontent.com/digitalocean/digitalocean-cloud-controller-manager/master/releases/v0.1.6.yml
 EOF
     }
