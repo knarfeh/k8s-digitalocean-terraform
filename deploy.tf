@@ -88,8 +88,8 @@ resource "digitalocean_droplet" "k8s_master" {
         inline = [
             "chmod +x /tmp/install-kubeadm.sh",
             "sudo /tmp/install-kubeadm.sh",
-            "export MASTER_PRIVATE_IP=\"${digitalocean_droplet.k8s_master.ipv4_address_private}\"",
-            "export MASTER_PUBLIC_IP=\"${digitalocean_droplet.k8s_master.ipv4_address}\"",
+            "export MASTER_PRIVATE_IP=\"${self.ipv4_address_private}\"",
+            "export MASTER_PUBLIC_IP=\"${self.ipv4_address}\"",
             "chmod +x /tmp/00-master.sh",
             "sudo -E /tmp/00-master.sh"
         ]
@@ -104,7 +104,7 @@ resource "digitalocean_droplet" "k8s_master" {
     provisioner "local-exec" {
         command =<<EOF
             scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${var.ssh_private_key} root@${digitalocean_droplet.k8s_master.ipv4_address}:"/tmp/kubeadm_join /etc/kubernetes/admin.conf" ${path.module}/secrets/
-            sed -i '' "s/${digitalocean_droplet.k8s_master.ipv4_address_private}/${digitalocean_droplet.k8s_master.ipv4_address}/" ${path.module}/secrets/admin.conf
+            sed -i '.bak' "s/${self.ipv4_address_private}/${self.ipv4_address}/" ${path.module}/secrets/admin.conf
 EOF
     }
 
@@ -165,7 +165,7 @@ resource "digitalocean_droplet" "k8s_worker" {
         inline = [
             "chmod +x /tmp/install-kubeadm.sh",
             "sudo /tmp/install-kubeadm.sh",
-            "export NODE_PRIVATE_IP=\"${digitalocean_droplet.k8s_worker.ipv4_address}\"",
+            "export NODE_PRIVATE_IP=\"${self.ipv4_address_private}\"",
             "chmod +x /tmp/01-worker.sh",
             "sudo -E /tmp/01-worker.sh"
         ]
