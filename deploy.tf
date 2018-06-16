@@ -183,11 +183,11 @@ resource "null_resource" "deploy_nginx_ingress" {
    depends_on = ["digitalocean_droplet.k8s_worker"]
    provisioner "local-exec" {
        command = <<EOF
-           export KUBECONFIG=${path.module}/secrets/admin.conf
+            export KUBECONFIG=${path.module}/secrets/admin.conf
             sed -e "s/\$DO_ACCESS_TOKEN/${var.do_token}/" < ${path.module}/02-do-secret.yaml > ./secrets/02-do-secret.rendered.yaml
-           until kubectl get pods 2>/dev/null; do printf '.'; sleep 5; done
-           kubectl create -f ./03-ingress-controller.yaml
-           kubectl create clusterrolebinding serviceaccounts-cluster-admin --clusterrole=cluster-admin --group=system:serviceaccounts:default --namespace=default
+            until kubectl get pods 2>/dev/null; do printf '.'; sleep 5; done
+            kubectl create -f ./03-ingress-controller.yaml
+            kubectl create clusterrolebinding serviceaccounts-cluster-admin --clusterrole=cluster-admin --group=system:serviceaccounts:default --namespace=default
 
 EOF
    }
@@ -197,10 +197,11 @@ resource "null_resource" "deploy_hello" {
    depends_on = ["digitalocean_droplet.k8s_worker"]
    provisioner "local-exec" {
        command = <<EOF
-           export KUBECONFIG=${path.module}/secrets/admin.conf
+            export KUBECONFIG=${path.module}/secrets/admin.conf
             sed -e "s/\$DO_ACCESS_TOKEN/${var.do_token}/" < ${path.module}/02-do-secret.yaml > ./secrets/02-do-secret.rendered.yaml 
-           until kubectl get pods 2>/dev/null; do printf '.'; sleep 5; done
-           kubectl create -f ./04-hello.yaml
+            until kubectl get pods 2>/dev/null; do printf '.'; sleep 5; done
+            sed -e "s/\$HELLO_ING_HOST/${digitalocean_droplet.k8s_worker.ipv4_address}.xip.io/" < ${path.module}/04-hello.yaml > ./05-xip-hello.yaml
+            kubectl create -f ./05-xip-hello.yaml
 
 EOF
    }

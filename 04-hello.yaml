@@ -51,7 +51,7 @@ metadata:
     ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - host: int.nujeh.com
+  - host: "$HELLO_ING_HOST"
     http:
       paths:
       - path: /

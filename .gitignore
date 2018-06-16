@@ -11,3 +11,4 @@ secrets/
 *.tfstate
 *.tfstate.backup
 .terraform/
+05-xip-hello.yaml
