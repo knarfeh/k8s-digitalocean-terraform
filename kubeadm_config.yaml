@@ -1,0 +1,18 @@
+apiVersion: kubeadm.k8s.io/v1alpha2
+kind: MasterConfiguration
+kubernetesVersion: v1.12.0
+
+api:
+  advertiseAddress: "{{MASTER_PRIVATE_IP}}"
+  bindPort: 6443
+apiServerCertSANs:
+  - "{{MASTER_PUBLIC_IP}}"
+
+imageRepository: k8s.gcr.io
+apiServerExtraArgs:
+  insecure-bind-address: "{{MASTER_PRIVATE_IP}}"
+  insecure-port: "8080"
+networking:
+  podSubnet: "10.244.0.0/16"
+featureGates:
+  CoreDNS: True

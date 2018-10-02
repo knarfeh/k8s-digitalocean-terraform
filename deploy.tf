@@ -32,7 +32,7 @@ variable "size_master" {
 }
 
 variable "size_worker" {
-    default = "s-2vcpu-4gb"
+    default = "s-1vcpu-1gb"
 }
 
 
@@ -76,6 +76,16 @@ resource "digitalocean_droplet" "k8s_master" {
     provisioner "file" {
         source = "./install-kubeadm.sh"
         destination = "/tmp/install-kubeadm.sh"
+        connection {
+            type = "ssh",
+            user = "root",
+            private_key = "${file(var.ssh_private_key)}"
+        }
+    }
+
+    provisioner "file" {
+        source = "./kubeadm_config.yaml"
+        destination = "/tmp/kubeadm_config.yaml"
         connection {
             type = "ssh",
             user = "root",
