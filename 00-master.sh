@@ -13,6 +13,7 @@ systemctl enable docker kubelet
 # used to join nodes to the cluster
 kubeadm token create --print-join-command > /tmp/kubeadm_join
 
+# kubectl taint nodes --all node.kubernetes.io/not-ready-
 kubectl taint nodes k8s-master node-role.kubernetes.io/master:NoSchedule-
 
 # install helm

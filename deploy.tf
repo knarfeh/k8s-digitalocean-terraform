@@ -189,6 +189,16 @@ resource "digitalocean_droplet" "k8s_worker" {
 
 # use kubeconfig retrieved from master
 
+resource "null_resource" "node-ready" {
+   depends_on = ["digitalocean_droplet.k8s_worker"]
+   provisioner "local-exec" {
+       command = <<EOF
+            export KUBECONFIG=${path.module}/secrets/admin.conf
+            kubectl taint nodes --all node.kubernetes.io/not-ready-
+EOF
+   }
+}
+
 resource "null_resource" "deploy_nginx_ingress" {
    depends_on = ["digitalocean_droplet.k8s_worker"]
    provisioner "local-exec" {

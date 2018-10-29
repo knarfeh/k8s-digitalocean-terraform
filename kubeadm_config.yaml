@@ -1,6 +1,6 @@
 apiVersion: kubeadm.k8s.io/v1alpha2
 kind: MasterConfiguration
-kubernetesVersion: v1.12.0
+kubernetesVersion: v1.12.2
 
 api:
   advertiseAddress: "{{MASTER_PRIVATE_IP}}"
@@ -16,3 +16,8 @@ networking:
   podSubnet: "10.244.0.0/16"
 featureGates:
   CoreDNS: True
+kubeProxy:
+  config:
+    featureGates:
+      SupportIPVSProxyMode: true
+    mode: "ipvs"
