@@ -28,11 +28,11 @@ variable "prefix" {
 }
 
 variable "size_master" {
-    default = "s-1vcpu-1gb"
+    default = "s-2vcpu-2gb"
 }
 
 variable "size_worker" {
-    default = "s-1vcpu-1gb"
+    default = "s-2vcpu-2gb"
 }
 
 
