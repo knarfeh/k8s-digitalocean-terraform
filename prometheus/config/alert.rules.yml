@@ -1,0 +1,24 @@
+groups:
+- name: Monitor
+  rules:
+  - alert: ServiceIsDead
+    expr: probe_success{job=~"check_tcp_all|check_docker_registry"} < 0.5
+    for: 2m
+    annotations:
+      description: Service {{ $labels.instance }} is unreachable
+      summary: Service {{ $labels.instance }} is unreachable
+  - alert: KubeServiceIsDead
+    expr: up{job=~"kubelet|kube-apiserver|kube-controller|kube-scheduler"} < 0.5
+    for: 2m
+    annotations:
+      description: "{{ $labels.instance }} - {{ $labels.job }} is dead"
+      summary: "{{ $labels.instance }} - {{ $labels.job }} is dead"
+  - alert: RedisIsDown
+    expr: redis_up < 1
+    for: 2m
+    annotations:
+      description: "Redis expoter can not scrape successfully for 2 min. instance: {{ $labels.instance }}; job: {{ $labels.job }}"
+  - alert: PodContainerRestarts
+    expr: changes(kube_pod_container_status_restarts[30m])>0
+    annotations:
+      description: "Pod container restart"

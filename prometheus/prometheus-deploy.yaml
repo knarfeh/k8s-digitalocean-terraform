@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: prometheus
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: k8s-master
+      containers:
+      - name: prometheus
+        image: prom/prometheus:v2.7.1
+        args:
+        - '--storage.tsdb.path=/data'
+        - '--storage.tsdb.retention=30d'
+        - '--config.file=/etc/prometheus/prometheus.yml'
+        - '--web.enable-admin-api'
+        - '--web.enable-lifecycle'
+        ports:
+        - name: web
+          containerPort: 9090
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/prometheus
+        - name: data-volume
+          mountPath: /data
+        securityContext:
+          runAsUser: 0
+      serviceAccountName: prometheus
+      terminationGracePeriodSeconds: 600
+      volumes:
+      - name: config-volume
+        configMap:
+          name: prometheus
+      - name: data-volume
+        hostPath:
+          path: /data/prom/

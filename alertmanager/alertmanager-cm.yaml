@@ -1,0 +1,24 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: alertmanager
+data:
+  alertmanager.yml: |-
+    route:
+      receiver: never-mind
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 4h
+      group_by: [alertname]
+      routes:
+      - receiver: dingding
+        match_re:
+          alertname: .*
+        continue: true
+
+    receivers:
+    - name: never-mind
+    - name: dingding
+      webhook_configs:
+      - send_resolved: true
+        url: https://webhook.site/b03d725f-40b7-40aa-b7a9-674252f8265a

@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+spec:
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+      - name: grafana
+        image: grafana/grafana:5.0.4
+        ports:
+        - name: http
+          containerPort: 3000 # Grafana cannot bind to port 80
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/grafana
+      volumes:
+      - name: config-volume
+        configMap:
+          name: grafana

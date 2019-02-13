@@ -35,3 +35,5 @@ for kernel_module in \${ipvs_modules}; do
 done
 EOF
 chmod 755 /etc/sysconfig/modules/ipvs.modules && bash /etc/sysconfig/modules/ipvs.modules && lsmod | grep ip_vs
+
+mkdir -p /data/prom

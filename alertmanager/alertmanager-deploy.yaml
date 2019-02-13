@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alertmanager
+spec:
+  selector:
+    matchLabels:
+      app: alertmanager
+  template:
+    metadata:
+      labels:
+        app: alertmanager
+    spec:
+      containers:
+      - name: alertmanager
+        image: prom/alertmanager
+        args:
+        - '--config.file=/etc/prometheus/alertmanager.yml'
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/prometheus
+      - name: prometheus-webhook-dingtalk
+        image: timonwong/prometheus-webhook-dingtalk
+        args:
+        - --ding.profile=brain-alert=https://oapi.dingtalk.com/robot/send?access_token=927ffc277c6b4a26dc6ecc5501bb802c54928383209b868ee392a74f22800ee5
+      volumes:
+      - name: config-volume
+        configMap:
+          name: alertmanager
