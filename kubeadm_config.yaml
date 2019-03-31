@@ -1,7 +1,4 @@
-apiEndpoint:
-  advertiseAddress: {{MASTER_PRIVATE_IP}}
-  bindPort: 6443
-apiVersion: kubeadm.k8s.io/v1alpha3
+apiVersion: kubeadm.k8s.io/v1beta1
 bootstrapTokens:
 - groups:
   - system:bootstrappers:kubeadm:default-node-token
@@ -11,6 +8,9 @@ bootstrapTokens:
   - signing
   - authentication
 kind: InitConfiguration
+localAPIEndpoint:
+  advertiseAddress: {{MASTER_PRIVATE_IP}}
+  bindPort: 6443
 nodeRegistration:
   criSocket: /var/run/dockershim.sock
   name: k8s-master
@@ -18,33 +18,31 @@ nodeRegistration:
   - effect: NoSchedule
     key: node-role.kubernetes.io/master
 ---
-apiServerCertSANs:
-- {{MASTER_PUBLIC_IP}}
-apiServerExtraArgs:
-  insecure-bind-address: {{MASTER_PUBLIC_IP}}
-  insecure-port: "8080"
-apiVersion: kubeadm.k8s.io/v1alpha3
-auditPolicy:
-  logDir: /var/log/kubernetes/audit
-  logMaxAge: 2
-  path: ""
+apiServer:
+  certSANs:
+  - {{MASTER_PUBLIC_IP}}
+  extraArgs:
+    insecure-bind-address: {{MASTER_PUBLIC_IP}}
+    insecure-port: "8080"
+  timeoutForControlPlane: 4m0s
+apiVersion: kubeadm.k8s.io/v1beta1
 certificatesDir: /etc/kubernetes/pki
 clusterName: kubernetes
 controlPlaneEndpoint: ""
+controllerManager: {}
+dns:
+  type: CoreDNS
 etcd:
   local:
     dataDir: /var/lib/etcd
-    image: ""
-featureGates:
-  CoreDNS: true
 imageRepository: k8s.gcr.io
 kind: ClusterConfiguration
-kubernetesVersion: v1.13.3
+kubernetesVersion: v1.14.0
 networking:
   dnsDomain: cluster.local
   podSubnet: 10.244.0.0/16
   serviceSubnet: 10.96.0.0/12
-unifiedControlPlaneImage: ""
+scheduler: {}
 ---
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
 bindAddress: 0.0.0.0
@@ -85,3 +83,7 @@ oomScoreAdj: -999
 portRange: ""
 resourceContainer: /kube-proxy
 udpIdleTimeout: 250ms
+winkernel:
+  enableDSR: false
+  networkName: ""
+  sourceVip: ""

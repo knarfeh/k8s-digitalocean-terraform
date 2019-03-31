@@ -75,7 +75,7 @@ metadata:
     k8s-app: nginx-ingress-controller
   namespace: default
 spec:
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:
@@ -87,7 +87,7 @@ spec:
       # like with kubeadm
       hostNetwork: true
       containers:
-      - image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.20.0
+      - image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.23.0
         name: nginx-ingress-controller
         readinessProbe:
           httpGet:
