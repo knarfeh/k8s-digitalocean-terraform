@@ -170,6 +170,12 @@ NAME          LABELS                               STATUS
 X.X.X.X       kubernetes.io/hostname=X.X.X.X       Ready
 ```
 
+### Setup monitoring system
+
+```bash
+helm install --name monitoring stable/prometheus-operator -f prometheus-operator-values.yaml
+```
+
 ### Thanks
 
 * [kubernetes-digitalocean-terraform/kubernetes-digitalocean-terraform](https://github.com/kubernetes-digitalocean-terraform/kubernetes-digitalocean-terraform)
