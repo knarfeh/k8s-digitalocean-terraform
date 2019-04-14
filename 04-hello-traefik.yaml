@@ -45,18 +45,13 @@ metadata:
   name: hello
   namespace: default
   annotations:
-    kubernetes.io/ingress.class: "nginx"
-    ingress.kubernetes.io/limit-rps: "1"
-    ingress.kubernetes.io/enable-cors: "true"
-    ingress.kubernetes.io/rewrite-target: /
+     kubernetes.io/ingress.class: traefik
 spec:
   rules:
-  - host: "$HELLO_ING_HOST"
+  - host: "traefik.nujeh.com"
     http:
       paths:
       - path: /
         backend:
           serviceName: hello
           servicePort: 80
-
----

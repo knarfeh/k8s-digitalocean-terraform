@@ -170,6 +170,13 @@ NAME          LABELS                               STATUS
 X.X.X.X       kubernetes.io/hostname=X.X.X.X       Ready
 ```
 
+### Install traefik
+
+```bash
+kubectl create clusterrolebinding serviceaccounts-cluster-admin --clusterrole=cluster-admin --group=system:serviceaccounts:default --namespace=default
+helm install stable/traefik --name traefik -f traefik-values.yaml
+```
+
 ### Thanks
 
 * [kubernetes-digitalocean-terraform/kubernetes-digitalocean-terraform](https://github.com/kubernetes-digitalocean-terraform/kubernetes-digitalocean-terraform)

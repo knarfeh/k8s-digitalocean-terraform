@@ -200,6 +200,7 @@ EOF
 }
 */
 
+/*
 resource "null_resource" "deploy_nginx_ingress" {
    depends_on = ["digitalocean_droplet.k8s_worker"]
    provisioner "local-exec" {
@@ -211,6 +212,7 @@ resource "null_resource" "deploy_nginx_ingress" {
 EOF
    }
 }
+*/
 
 resource "null_resource" "deploy_hello" {
    depends_on = ["digitalocean_droplet.k8s_worker"]
