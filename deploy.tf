@@ -225,7 +225,7 @@ resource "null_resource" "deploy_hello" {
 EOF
    }
 }
-
+/*
 resource "null_resource" "deploy_digitalocean_cloud_controller_manager" {
     depends_on = ["digitalocean_droplet.k8s_worker"]
     provisioner "local-exec" {
@@ -238,3 +238,4 @@ resource "null_resource" "deploy_digitalocean_cloud_controller_manager" {
 EOF
     }
 }
+*/

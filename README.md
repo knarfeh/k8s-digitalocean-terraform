@@ -170,6 +170,12 @@ NAME          LABELS                               STATUS
 X.X.X.X       kubernetes.io/hostname=X.X.X.X       Ready
 ```
 
+### Install metallb
+
+```bash
+helm install --name metallb -f metallb-values.yaml stable/metallb
+```
+
 ### Thanks
 
 * [kubernetes-digitalocean-terraform/kubernetes-digitalocean-terraform](https://github.com/kubernetes-digitalocean-terraform/kubernetes-digitalocean-terraform)

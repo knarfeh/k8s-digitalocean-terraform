@@ -1,0 +1,7 @@
+configInline:
+  address-pools:
+    - name: default
+      protocol: layer2
+      addresses:
+      - 192.241.157.138
+      - 198.211.96.252
