@@ -7,7 +7,7 @@ sed -i "s/{{MASTER_PUBLIC_IP}}/$MASTER_PUBLIC_IP/g" /tmp/kubeadm_config.yaml
 sed -i "s/{{MASTER_PRIVATE_IP}}/$MASTER_PRIVATE_IP/g" /tmp/kubeadm_config.yaml
 
 kubeadm init --config /tmp/kubeadm_config.yaml
-kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.11.0/Documentation/kube-flannel.yml
 systemctl enable docker kubelet
 
 # used to join nodes to the cluster

@@ -7,9 +7,10 @@ apt-get install -y \
     ca-certificates \
     curl \
     software-properties-common \
+    ipset \
     ipvsadm
 
-export VERSION=18.09.4 && curl -sSL get.docker.com | sh
+export VERSION=18.09.5 && curl -sSL get.docker.com | sh
 # Setup daemon.
 cat > /etc/docker/daemon.json <<EOF
 {
@@ -24,7 +25,7 @@ mkdir -p /etc/systemd/system/docker.service.d
 systemctl daemon-reload
 systemctl restart docker
 
-curl -L https://github.com/docker/compose/releases/download/1.24.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 
 apt-get update && apt-get install -y apt-transport-https
@@ -33,7 +34,7 @@ cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
 deb http://apt.kubernetes.io/ kubernetes-xenial main
 EOF
 apt-get update
-apt-get install -y kubernetes-cni=0.7.5-00 kubelet=1.14.0-00 kubeadm=1.14.0-00 kubectl=1.14.0-00
+apt-get install -y kubernetes-cni=0.7.5-00 kubelet=1.15.0-00 kubeadm=1.15.0-00 kubectl=1.15.0-00
 
 echo "modprobe ipvs"
 mkdir -p /etc/sysconfig/modules/
